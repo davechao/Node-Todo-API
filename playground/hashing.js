@@ -14,40 +14,38 @@ bcrypt.compare(password, hashedPassword, (err, res) => {
 	console.log(res);
 });
 
+var data = {
+	id: 10
+};
 
+var token = jwt.sign(data, '123abc');
+console.log(token);
 
-// var data = {
-// 	id: 10
-// };
+var decoded = jwt.verify(token, '123abc');
+console.log(decoded);
 
-// var token = jwt.sign(data, '123abc');
-// console.log(token);
+var message = 'I am user number 3';
+var hash = SHA256(message).toString();
 
-// var decoded = jwt.verify(token, '123abc');
-// console.log(decoded);
+console.log(`Message: ${message}`);
+console.log(`Hash: ${hash}`);
 
-// var message = 'I am user number 3';
-// var hash = SHA256(message).toString();
+var data = {
+	id: 4
+};
 
-// console.log(`Message: ${message}`);
-// console.log(`Hash: ${hash}`);
+var token = {
+	data, 
+	hash: SHA256(JSON.stringify(data) + 'somesecret').toString()
+};
 
-// var data = {
-// 	id: 4
-// };
+token.data.id = 5;
+token.hash = SHA256(JSON.stringify(token.data)).toString();
 
-// var token = {
-// 	data, 
-// 	hash: SHA256(JSON.stringify(data) + 'somesecret').toString()
-// };
+var resultHash = SHA256(JSON.stringify(data) + 'somesecret').toString()
 
-// token.data.id = 5;
-// token.hash = SHA256(JSON.stringify(token.data)).toString();
-
-// var resultHash = SHA256(JSON.stringify(data) + 'somesecret').toString()
-
-// if(resultHash == token.hash) {
-// 	console.log('Data was not changed');
-// } else {
-// 	console.log('Data was changed. Do not trust!');
-// }
+if(resultHash == token.hash) {
+	console.log('Data was not changed');
+} else {
+	console.log('Data was changed. Do not trust!');
+}
